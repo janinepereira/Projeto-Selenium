@@ -6,22 +6,27 @@ on:
       - main
 
 jobs:
-  cypress-run:
+  selenium-run:
     runs-on: ubuntu-24.04
     steps:
       - name: Baixando projeto
         uses: actions/checkout@v4
 
-      - name: Executando teste cypress
-        uses: cypress-io/github-action@v6
+      - name: Configurando Node.js
+        uses: actions/setup-node@v4
         with:
-          browser: chrome
-          spec: cypress/e2e/login.cy.js
+          node-version: '20' # Ajuste para a versão que você utiliza no projeto
+
+      - name: Instalando dependências
+        run: npm install
+
+      - name: Executando teste Selenium
+        run: npm test # Ou o comando exato que você usa (ex: npx mocha tests/login.spec.js)
 
       - name: Subindo relatório
         if: always() # Certifique-se de que o relatório será salvo mesmo se os testes falharem
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-report # Nome do artifact
-          path: mochawesome-report # Caminho onde o relatório está salvo
+          name: selenium-report # Nome do artifact atualizado
+          path: mochawesome-report # Ajuste caso seu relatório seja salvo em outra pasta
           retention-days: 3 # Define que o artifact expira em 3 dias
